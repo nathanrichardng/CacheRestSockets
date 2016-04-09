@@ -1,0 +1,59 @@
+<html>
+<head>
+
+<!-- Put your page Title here -->
+<title>	Cache Server Page </title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="restSocket.js"></script>
+
+</head>
+
+<body>
+		<h3>Messages</h3>
+		<div id="messages"></div>
+		
+		<script type="text/javascript">
+		
+			
+			
+			var rs = restSocket(window.location.host + "/csp/RESTSockets/WEBSOCKETS.RESTSOCKET.cls");
+				rs.onOpen(function(){
+					rs.subscribe("game informer");
+					rs.on("game informer", "subscribed", addMessage);
+					rs.on("game informer", "unsubscribed", addMessage);
+					rs.on("game informer", "message", addMessage);
+				});
+				
+				
+				
+				function addMessage(message) {
+					var messages = $("#messages");
+					messages.append("<p>"+message+"</p>");
+					if (messages.children().length > 5) {
+						messages.children().first().remove();
+					}
+				}
+			
+			function sendMessage() {
+				$.post( "http://" + window.location.host + "/csp/RESTSockets/message", 
+						{Publication: "game informer", Message: $('#username').val() + ": " + $('#newMessage').val()})
+				  .done(function( data ) {
+				    $('#newMessage').val("");
+				  });
+			
+			}
+			
+			
+			
+		</script>
+		<form id="sendMessageForm" onSubmit="sendMessage(); return false;" autocomplete="off">
+			<input type="text" id="username">
+			<input type="text" id="newMessage">
+			<input type="submit" value="Send">
+		</form>
+		<button onclick="rs.unsubscribe('game informer')">
+			Unsubscribe
+		</button>
+		<!-- Put your page code here -->
+</body>
+</html>
