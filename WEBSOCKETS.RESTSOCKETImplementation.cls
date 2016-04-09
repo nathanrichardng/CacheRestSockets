@@ -1,4 +1,4 @@
-Class WEBSOCKETS.RESTSOCKETImplementation Extends WEBSOCKETS.RESTSOCKET
+Class WEBSOCKETS.RESTSOCKETImplementation Extends DLS.WEBSOCKETS.RESTSOCKET
 {
 
 XData UrlMap
@@ -33,13 +33,6 @@ ClassMethod GetSubscribers() As %ListOfDataTypes
 	Set subscribers = ##class(WEBSOCKETS.PUBSUB).GetSubscribers(publication)
 	Set subscribers = ##class(%ZEN.Auxiliary.jsonProvider).%ObjectToJSON(subscribers)
 	Quit subscribers
-}
-
-ClassMethod Broadcast(pPublication As %String, pAction As %String, pMessage As %String) As %Status
-{
-	Set message = ##class(WEBSOCKETS.Message).generateJsonMessage(pPublication, pAction, pMessage)
-	Set status = ##class(WEBSOCKETS.PUBSUB).Broadcast(pPublication, message)
-	Quit status
 }
 
 }

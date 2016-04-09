@@ -1,6 +1,11 @@
-Class DLS.WEBSOCKETS.RESTSOCKET Extends (%CSP.REST, DLS.WEBSOCKETS.Server)
+Class WEBSOCKETS.RESTSOCKET Extends (%CSP.REST, DLS.WEBSOCKETS.Server)
 {
 
-// just exists to make inheritance easier
+ClassMethod Broadcast(pPublication As %String, pAction As %String, pMessage As %String) As %Status
+{
+	Set message = ##class(WEBSOCKETS.Message).generateJsonMessage(pPublication, pAction, pMessage)
+	Set status = ##class(WEBSOCKETS.PUBSUB).Broadcast(pPublication, message)
+	Quit status
+}
 
 }
